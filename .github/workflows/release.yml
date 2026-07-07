@@ -1,0 +1,55 @@
+name: Release
+
+# Cuts a GitHub Release with installers for all three platforms whenever a
+# version tag (e.g. v0.1.0) is pushed. To release:
+#   npm version <patch|minor|major>   # bumps package.json and creates the tag
+#   git push --follow-tags
+# electron-builder builds on each OS runner and uploads its own installer
+# (.dmg/.zip, .exe, .AppImage/.deb) to the tag's release, creating a draft if
+# one doesn't exist yet. Builds are UNSIGNED for now (see README install notes).
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    # This app has ZERO runtime dependencies, so we deliberately do NOT run
+    # `npm ci` — it was reliably crashing npm on the runners ("Exit handler
+    # never called", ~73s in) while installing electron-builder's binary deps.
+    # Instead: the self-test and icon generator use only Node built-ins, and
+    # electron-builder is fetched on demand by npx (which installs cleanly).
+    # It downloads its own Electron for packaging via build.electronVersion.
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Cross-platform sanity gate: proves the core loads and can scan without
+      # a display (pure Node, no Electron window, no node_modules).
+      - name: Core self-test
+        run: node bin/cli.js scan
+
+      - name: Generate icons
+        run: node scripts/gen-icons.js
+
+      - name: Build and publish installers
+        run: npx --yes electron-builder@25.1.8 --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No signing certs in CI — build unsigned rather than trying and failing.
+          CSC_IDENTITY_AUTO_DISCOVERY: false

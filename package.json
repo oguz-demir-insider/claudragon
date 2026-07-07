@@ -1,0 +1,109 @@
+{
+  "name": "claudragon",
+  "version": "0.1.0-alpha.6",
+  "description": "Cross-platform tray control panel for monitoring multiple Claude Code sessions — see at a glance which are running, idle, done, or waiting for your permission.",
+  "type": "commonjs",
+  "main": "src/main/main.js",
+  "bin": {
+    "claudragon": "bin/cli.js"
+  },
+  "scripts": {
+    "start": "electron .",
+    "smoke": "electron . --smoke",
+    "scan": "node bin/cli.js scan",
+    "scan:json": "node bin/cli.js scan --json",
+    "install-hooks": "node bin/cli.js install-hooks",
+    "uninstall-hooks": "node bin/cli.js uninstall-hooks",
+    "icons": "node scripts/gen-icons.js",
+    "pack": "npm run icons && electron-builder --dir",
+    "dist": "npm run icons && electron-builder",
+    "dist:mac": "npm run icons && electron-builder --mac",
+    "dist:win": "npm run icons && electron-builder --win",
+    "dist:linux": "npm run icons && electron-builder --linux"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "anthropic",
+    "dashboard",
+    "monitor",
+    "tray",
+    "menubar",
+    "electron",
+    "ai-agents"
+  ],
+  "license": "MIT",
+  "author": "Oguz Demir",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oguz-demir-insider/claudragon.git"
+  },
+  "devDependencies": {
+    "electron": "^32.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.oguzdemir.claudragon",
+    "productName": "Claudragon",
+    "copyright": "© 2026 Oguz Demir",
+    "electronVersion": "32.3.3",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "bin/**/*",
+      "hooks/**/*",
+      "scripts/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "hooks/**"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "extendInfo": {
+        "LSUIElement": 1
+      }
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "category": "Development",
+      "maintainer": "Oguz Demir <m.w.oguz@gmail.com>",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "oguz-demir-insider",
+      "repo": "claudragon"
+    }
+  }
+}

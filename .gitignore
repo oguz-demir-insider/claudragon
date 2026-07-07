@@ -1,0 +1,11 @@
+node_modules/
+dist/
+out/
+*.log
+.DS_Store
+.env
+.env.local
+# Local, machine-only pre-commit denylist (internal names never published)
+.githooks/*.local
+# Generated runtime artifacts
+src/renderer/*.map

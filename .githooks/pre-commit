@@ -1,0 +1,56 @@
+#!/bin/sh
+# Pre-commit guard for a PUBLIC repo on a work machine.
+#
+# Scans the STAGED diff (added lines only) and blocks the commit if it finds:
+#   1. a high-signal secret / API key,
+#   2. a credential-looking file (.env, private key, keystore),
+#   3. any company-internal reference listed in .githooks/deny.local
+#      (that file is git-ignored, so the internal names are never published —
+#       the denylist itself stays on your machine).
+#
+# This runs on EVERY `git commit` once you set:  git config core.hooksPath .githooks
+# If a hit is a false positive, bypass with:      git commit --no-verify
+
+ROOT="$(git rev-parse --show-toplevel)"
+
+# Added lines in the staged diff, with the leading '+' preserved for context.
+added="$(git diff --cached --diff-filter=ACM -U0 | grep '^+' | grep -v '^+++')"
+files="$(git diff --cached --name-only --diff-filter=ACM)"
+
+fail=0
+flag() {
+  echo "🚫 pre-commit blocked — $1"
+  fail=1
+}
+
+# 1) High-signal secret formats (very low false-positive rate).
+secret_re='-----BEGIN [A-Z ]*PRIVATE KEY-----|AKIA[0-9A-Z]{16}|sk-ant-[A-Za-z0-9_-]{16,}|sk-[A-Za-z0-9]{32,}|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|xox[baprs]-[A-Za-z0-9-]{10,}|AIza[A-Za-z0-9_-]{35}|glpat-[A-Za-z0-9_-]{20,}'
+if printf '%s\n' "$added" | grep -nEq -e "$secret_re"; then
+  flag "possible secret / API key:"
+  printf '%s\n' "$added" | grep -nEi -e "$secret_re" | head -5
+fi
+
+# 2) Credential-looking files.
+file_re='(^|/)\.env($|\.)|\.pem$|\.p12$|\.pfx$|(^|/)id_rsa$|\.keystore$|(^|/)credentials?($|\.)'
+if printf '%s\n' "$files" | grep -nEq -e "$file_re"; then
+  flag "credential-looking file staged:"
+  printf '%s\n' "$files" | grep -nEi -e "$file_re" | head -5
+fi
+
+# 3) Company-internal references (local, un-published denylist).
+DENY="$ROOT/.githooks/deny.local"
+if [ -f "$DENY" ]; then
+  pat="$(grep -vE '^[[:space:]]*(#|$)' "$DENY" | paste -sd'|' -)"
+  if [ -n "$pat" ] && printf '%s\n' "$added" | grep -nEiq -e "$pat"; then
+    flag "company-internal reference (see .githooks/deny.local):"
+    printf '%s\n' "$added" | grep -nEi -e "$pat" | head -5
+  fi
+fi
+
+if [ "$fail" -ne 0 ]; then
+  echo ""
+  echo "This repository is PUBLIC. Remove the above before committing."
+  echo "If it is a false positive, re-run with:  git commit --no-verify"
+  exit 1
+fi
+exit 0

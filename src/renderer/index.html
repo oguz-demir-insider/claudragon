@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:;"
+    />
+    <title>Claudragon</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img class="brand-bee" src="../../assets/sprites/mascot.png" alt="" draggable="false" />
+        CLAUDRAGON
+      </div>
+      <div class="pills" id="pills"></div>
+      <button class="icon-btn" id="theme" title="Toggle pixel / classic theme">🎮</button>
+      <button class="icon-btn" id="quit" title="Quit Claudragon">⏻</button>
+    </header>
+
+    <!-- PARTY (live sessions) / NOTES (saved threads) — pixel theme only -->
+    <nav class="tabs" id="tabs" hidden>
+      <button class="tab selected" id="tabParty" data-tab="party">🐉 PARTY</button>
+      <button class="tab" id="tabNotes" data-tab="notes">📌 NOTES</button>
+    </nav>
+
+    <div class="banner" id="banner" hidden></div>
+
+    <!-- Account-wide 5-hour rate-limit "mana pool" (shown once real stats are on) -->
+    <div class="mana" id="mana" hidden>
+      <span class="mana-label">⚡ 5h</span>
+      <div class="manabar"><i class="manafill" id="manaBar"></i></div>
+      <span class="mana-pct" id="manaPct"></span>
+    </div>
+
+    <main class="list" id="list"></main>
+    <main class="notes" id="notes" hidden></main>
+
+    <!-- Pokémon-style dialogue box + action hub (pixel theme, party tab) -->
+    <div class="dialogue" id="dialogue" hidden>
+      <div class="dlg-line">
+        <span class="dialogue-name" id="dlgName"></span>
+        <span class="dialogue-text" id="dlgText"></span>
+      </div>
+      <div class="dlg-actions" id="dlgActions">
+        <button class="dlg-btn" id="btnSave">💾 Save</button>
+        <button class="dlg-btn" id="btnGo">→ Go</button>
+      </div>
+      <div class="dlg-saveform" id="dlgSaveForm" hidden>
+        <input
+          class="dlg-input"
+          id="noteInput"
+          type="text"
+          maxlength="120"
+          placeholder="why come back? (optional)"
+        />
+        <div class="dlg-prio" id="prioChips">
+          <button class="prio-chip selected" data-prio="normal">· Normal</button>
+          <button class="prio-chip" data-prio="important">⭐ Important</button>
+          <button class="prio-chip" data-prio="urgent">🔥 Urgent</button>
+        </div>
+        <div class="dlg-saverow">
+          <button class="dlg-btn" id="btnSaveConfirm">Save to Notes</button>
+          <button class="dlg-btn ghost" id="btnSaveCancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="foot">
+      <span id="meta">—</span>
+      <span class="hint" id="hint">click a card → jump to its terminal</span>
+    </footer>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1084 @@
+:root {
+  /* Dragon — Japanese/Nintendo neon-turquoise palette */
+  --bg-deep: #0b1a2e;
+  --bg-mid: #102b45;
+  --teal-dark: #0e6e78;
+  --turquoise: #18c6c0;
+  --neon-cyan: #2ee8e0;
+  --electric: #5ff6ff;
+  --dragon-red: #ff3d6e;
+  --gold: #ffc23c;
+  --neon-purple: #9b5cff;
+  --ui-light: #e6fbff;
+
+  /* semantic roles */
+  --bg: var(--bg-deep);
+  --bg2: var(--bg-mid);
+  --card: #143150;
+  --card-hover: #1b4068;
+  --text: var(--ui-light);
+  --muted: #7fa6c2;
+  --line: #173a55;
+  --perm: var(--dragon-red);
+  --plan: #b274ff; /* plan-approval: a brighter violet than --wait, paired with gold */
+  --wait: var(--neon-purple);
+  --run: var(--neon-cyan);
+  --idle: var(--gold);
+  --done: var(--electric);
+  --accent: var(--turquoise);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* The `hidden` attribute must win even on elements that set `display`
+   (.list / .notes / .dlg-actions / .dlg-saveform use flex, which would
+   otherwise override the user-agent `hidden` rule and leave them visible). */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- top bar ---- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(180deg, var(--bg2), var(--bg));
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.logo {
+  color: var(--accent);
+  margin-right: 4px;
+}
+.pills {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+.pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.pill.st-perm {
+  color: #fff;
+  background: var(--perm);
+  border-color: transparent;
+}
+.pill.st-plan {
+  color: #0a1320;
+  background: var(--gold);
+  border-color: transparent;
+}
+.pill.st-run {
+  color: var(--run);
+  border-color: var(--run);
+}
+.pill.st-idle {
+  color: var(--idle);
+}
+.pill.st-done {
+  color: var(--done);
+}
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 15px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 6px;
+}
+.icon-btn:hover {
+  color: var(--perm);
+  background: var(--card);
+}
+
+/* ---- banner ---- */
+.banner {
+  margin: 10px 14px 0;
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: rgba(255, 61, 110, 0.14);
+  border: 1px solid rgba(255, 61, 110, 0.45);
+  color: #ffc4d6;
+  font-size: 12px;
+  font-weight: 600;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ---- list ---- */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 12px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+.list::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.08s ease;
+}
+.card:hover {
+  background: var(--card-hover);
+}
+.card:active {
+  transform: scale(0.99);
+}
+.card.st-perm {
+  border-left-color: var(--perm);
+}
+.card.st-plan {
+  border-left-color: var(--plan);
+}
+.card.st-wait {
+  border-left-color: var(--wait);
+}
+.card.st-run {
+  border-left-color: var(--run);
+}
+.card.st-idle {
+  border-left-color: var(--idle);
+}
+.card.st-done {
+  border-left-color: var(--done);
+  opacity: 0.75;
+}
+.card.st-stale {
+  border-left-color: var(--muted);
+  opacity: 0.7;
+}
+
+.dot {
+  font-size: 16px;
+  line-height: 1;
+}
+.body {
+  flex: 1;
+  min-width: 0;
+}
+.line1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.proj {
+  font-weight: 700;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.age {
+  font-size: 11px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.line2 {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin-top: 2px;
+}
+.status {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+}
+.card.st-perm .status {
+  color: var(--perm);
+}
+.card.st-plan .status {
+  color: var(--gold); /* gold "APPROVE PLAN" — reads as a question, not a stop */
+}
+.card.st-run .status {
+  color: var(--run);
+}
+.detail {
+  font-size: 11.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.line3 {
+  font-size: 10px;
+  color: #5b6378;
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.go {
+  color: var(--muted);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.card:hover .go {
+  color: var(--text);
+}
+
+/* ---- empty ---- */
+.empty {
+  margin: auto;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.empty-emoji {
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+.empty span {
+  font-size: 11px;
+  color: #5b6378;
+}
+
+/* ---- footer ---- */
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  border-top: 1px solid var(--line);
+  font-size: 10.5px;
+  color: var(--muted);
+  background: var(--bg2);
+}
+.hint {
+  color: #5b6378;
+}
+
+/* ---- toast ---- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 44px;
+  transform: translateX(-50%);
+  max-width: 90%;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #2a3142;
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 11.5px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.toast.ok {
+  border-color: var(--run);
+}
+.toast.warn {
+  border-color: var(--wait);
+}
+
+/* ---- topic line (both themes) ---- */
+.topic {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+}
+.topic:empty {
+  display: none;
+}
+
+/* pixel-only elements are hidden in the classic (default) theme */
+.sprite,
+.hpwrap,
+.badge,
+.empty-bee {
+  display: none;
+}
+
+/* Claudragon mascot in the header (both themes) */
+.brand-bee {
+  width: 18px;
+  height: 18px;
+  image-rendering: pixelated;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* ============================================================
+   PIXEL / POKÉMON PARTY-SCREEN THEME
+   ============================================================ */
+body[data-theme='pixel'] {
+  background: var(--bg-deep);
+  color: var(--ui-light);
+  font-family: 'Courier New', ui-monospace, monospace;
+}
+body[data-theme='pixel'] .topbar {
+  background: var(--bg-mid);
+  border-bottom: 3px solid #0a1320;
+}
+body[data-theme='pixel'] .brand {
+  color: var(--gold);
+  text-shadow: 1px 1px 0 #0a1320;
+}
+
+/* swap classic bits for pixel bits */
+body[data-theme='pixel'] .dot,
+body[data-theme='pixel'] .line3,
+body[data-theme='pixel'] .topic,
+body[data-theme='pixel'] .go {
+  display: none;
+}
+body[data-theme='pixel'] .sprite {
+  display: block;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+/* running — wings flap (2 frames) + gentle circular hover */
+body[data-theme='pixel'] .sprite[data-state='running'] {
+  background-image: url('../../assets/sprites/mascot-running.png');
+  background-size: 104px 52px;
+  animation: cbFlap 0.45s steps(2) infinite, cbHover 1.8s ease-in-out infinite;
+}
+@keyframes cbFlap {
+  to {
+    background-position-x: -104px;
+  }
+}
+@keyframes cbHover {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(2px, -2px);
+  }
+  50% {
+    transform: translate(0, -3px);
+  }
+  75% {
+    transform: translate(-2px, -2px);
+  }
+}
+/* idle — snore bubble grows (3 frames) + slow bob */
+body[data-theme='pixel'] .sprite[data-state='idle'] {
+  background-image: url('../../assets/sprites/mascot-idle.png');
+  background-size: 156px 52px;
+  animation: cbIdle 1.5s steps(3) infinite, cbBob 2.6s ease-in-out infinite;
+}
+@keyframes cbIdle {
+  to {
+    background-position-x: -156px;
+  }
+}
+@keyframes cbBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+/* needs permission — STOP sign (2 frames) + insistent shake */
+body[data-theme='pixel'] .sprite[data-state='needs_permission'] {
+  background-image: url('../../assets/sprites/mascot-needs_permission.png');
+  background-size: 104px 52px;
+  animation: cbStop 0.5s steps(2) infinite, cbShake 0.5s ease-in-out infinite;
+}
+@keyframes cbStop {
+  to {
+    background-position-x: -104px;
+  }
+}
+@keyframes cbShake {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-2px) rotate(-4deg);
+  }
+  75% {
+    transform: translateX(2px) rotate(4deg);
+  }
+}
+/* waiting — "?" look (2 frames) + tilt */
+body[data-theme='pixel'] .sprite[data-state='waiting_input'] {
+  background-image: url('../../assets/sprites/mascot-waiting_input.png');
+  background-size: 104px 52px;
+  animation: cbWait 0.8s steps(2) infinite, cbTilt 2s ease-in-out infinite;
+}
+@keyframes cbWait {
+  to {
+    background-position-x: -104px;
+  }
+}
+@keyframes cbTilt {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+/* plan approval — purple dragon presenting a big gold "?" (2 frames) + a slow
+   hopeful bob, distinct from waiting's tilt */
+body[data-theme='pixel'] .sprite[data-state='needs_plan_approval'] {
+  background-image: url('../../assets/sprites/mascot-needs_plan_approval.png');
+  background-size: 104px 52px;
+  animation: cbPlanQ 0.7s steps(2) infinite, cbPlanBob 1.6s ease-in-out infinite;
+}
+@keyframes cbPlanQ {
+  to {
+    background-position-x: -104px;
+  }
+}
+@keyframes cbPlanBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+/* done — sparkle (2 frames) */
+body[data-theme='pixel'] .sprite[data-state='done'] {
+  background-image: url('../../assets/sprites/mascot-done.png');
+  background-size: 104px 52px;
+  animation: cbDone 0.6s steps(2) infinite;
+}
+@keyframes cbDone {
+  to {
+    background-position-x: -104px;
+  }
+}
+/* stale — single dim frame */
+body[data-theme='pixel'] .sprite[data-state='stale'] {
+  background-image: url('../../assets/sprites/mascot-stale.png');
+  background-size: 52px 52px;
+  opacity: 0.7;
+}
+body[data-theme='pixel'] .hpwrap {
+  display: flex;
+}
+body[data-theme='pixel'] .badge {
+  display: flex;
+}
+
+/* party rows */
+body[data-theme='pixel'] .card {
+  background: var(--card);
+  border: 3px solid #0a1320;
+  border-radius: 6px;
+  box-shadow: inset -2px -2px 0 #1b273f, inset 2px 2px 0 #3f5680;
+  padding: 8px 10px;
+  align-items: center;
+  gap: 10px;
+}
+body[data-theme='pixel'] .card:hover {
+  background: var(--card-hover);
+}
+body[data-theme='pixel'] .proj {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  font-size: 12px;
+  text-shadow: 1px 1px 0 #0a1320;
+}
+body[data-theme='pixel'] .age {
+  color: var(--muted);
+}
+body[data-theme='pixel'] .status {
+  color: var(--ui-light);
+}
+body[data-theme='pixel'] .detail {
+  color: var(--muted);
+}
+
+/* HP bar (Pokémon-style) */
+.hpwrap {
+  align-items: center;
+  gap: 5px;
+  margin: 4px 0;
+}
+.hp-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+.hp {
+  flex: 1;
+  max-width: 150px;
+  height: 7px;
+  background: #0a1320;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.hp > i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--run);
+  transition: width 0.3s ease;
+}
+/* width = "HP" by state (set here, not inline, to satisfy a strict CSP) */
+.card.st-perm .hp > i {
+  background: var(--perm);
+  width: 18%;
+}
+.card.st-plan .hp > i {
+  background: var(--plan);
+  width: 30%;
+}
+.card.st-wait .hp > i {
+  background: var(--wait);
+  width: 45%;
+}
+.card.st-run .hp > i {
+  background: var(--run);
+  width: 100%;
+}
+.card.st-idle .hp > i {
+  background: var(--idle);
+  width: 62%;
+}
+.card.st-done .hp > i {
+  background: var(--done);
+  width: 100%;
+}
+.card.st-stale .hp > i {
+  background: var(--muted);
+  width: 15%;
+}
+
+/* status condition badge */
+.badge {
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 3px 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: 2px solid #0a1320;
+  border-radius: 4px;
+  background: #1b273f;
+  color: var(--ui-light);
+  text-shadow: 1px 1px 0 #0a1320;
+  flex-shrink: 0;
+}
+body[data-theme='pixel'] .card.st-perm .badge {
+  background: var(--perm);
+  color: #fff;
+  animation: blink 1s steps(2, jump-none) infinite;
+}
+body[data-theme='pixel'] .card.st-plan .badge {
+  background: var(--gold);
+  color: #0a1320;
+  animation: blink 1s steps(2, jump-none) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* iconic dialogue box */
+.dialogue {
+  margin: 0 10px 8px;
+  padding: 10px 12px;
+  background: #f7f7ef;
+  color: #20242e;
+  border: 3px solid #0a1320;
+  border-radius: 6px;
+  box-shadow: inset -2px -2px 0 #c8c8b8, inset 2px 2px 0 #ffffff;
+  font-family: 'Courier New', monospace;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+.dialogue-name {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-right: 6px;
+}
+body[data-theme='pixel'] .foot {
+  background: var(--bg-mid);
+  border-top: 3px solid #0a1320;
+}
+body[data-theme='pixel'] .empty-bee {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 12px;
+  image-rendering: pixelated;
+}
+body[data-theme='pixel'] .empty-emoji {
+  display: none;
+}
+
+/* ============================================================
+   GAMIFICATION LAYER (pixel theme): level · type · XP · glow · boxy
+   ============================================================ */
+
+/* level / type / Power are pixel-only */
+.lvl,
+.type,
+.pwrwrap {
+  display: none;
+}
+
+/* GameBoy/GBA look — kill rounding in the pixel theme (keep thick borders) */
+body[data-theme='pixel'] .card,
+body[data-theme='pixel'] .badge,
+body[data-theme='pixel'] .pill,
+body[data-theme='pixel'] .hp,
+body[data-theme='pixel'] .manabar,
+body[data-theme='pixel'] .type,
+body[data-theme='pixel'] .dialogue {
+  border-radius: 0;
+}
+
+/* line1: name on the left, age pushed to the right (lvl/type sit after the name) */
+.line1 .age {
+  margin-left: auto;
+}
+
+/* level tag */
+body[data-theme='pixel'] .lvl {
+  display: inline;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 0 #0a1320;
+}
+
+/* type badge — boxy, pixel border, colored by kind of work */
+body[data-theme='pixel'] .type {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 1px 4px;
+  border: 1px solid #0a1320;
+  color: #0a1320;
+}
+.type.ty-msg {
+  background: #d65cc8;
+}
+.type.ty-code {
+  background: var(--turquoise);
+}
+.type.ty-learn {
+  background: var(--gold);
+}
+.type.ty-task {
+  background: var(--muted);
+}
+
+/* Power row — reasoning effort as lit ⚡ pips, below HP (replaces the old XP bar) */
+body[data-theme='pixel'] .pwrwrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 2px 0 1px;
+}
+.xp-label {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--neon-purple);
+  letter-spacing: 1px;
+}
+.pwr {
+  display: inline-flex;
+  gap: 1px;
+  line-height: 1;
+}
+.pwr b {
+  font-size: 9px;
+  font-style: normal;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 #0a1320;
+}
+.pwr b.off {
+  opacity: 0.25;
+}
+.pwr.muted {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+/* HP % readout beside the bar (only present with real context data) */
+.hp-pct {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+/* Real HP: context-remaining width buckets + color. `.card.hpreal` outranks the
+   decorative per-state HP rules on specificity, so real data wins when present. */
+.card.hpreal .hp.hpb-0 > i { width: 3%; }
+.card.hpreal .hp.hpb-10 > i { width: 10%; }
+.card.hpreal .hp.hpb-20 > i { width: 20%; }
+.card.hpreal .hp.hpb-30 > i { width: 30%; }
+.card.hpreal .hp.hpb-40 > i { width: 40%; }
+.card.hpreal .hp.hpb-50 > i { width: 50%; }
+.card.hpreal .hp.hpb-60 > i { width: 60%; }
+.card.hpreal .hp.hpb-70 > i { width: 70%; }
+.card.hpreal .hp.hpb-80 > i { width: 80%; }
+.card.hpreal .hp.hpb-90 > i { width: 90%; }
+.card.hpreal .hp.hpb-100 > i { width: 100%; }
+.card.hpreal .hp.hpc-ok > i { background: var(--neon-cyan); }
+.card.hpreal .hp.hpc-warn > i { background: var(--gold); }
+.card.hpreal .hp.hpc-crit > i {
+  background: var(--dragon-red);
+  animation: hpflash 1s steps(2, jump-none) infinite;
+}
+@keyframes hpflash {
+  50% { opacity: 0.4; }
+}
+
+/* Account-wide 5-hour rate-limit "mana pool" bar (pixel theme only). Base is
+   hidden; shown as flex only in pixel theme AND when JS hasn't set [hidden]. */
+.mana { display: none; }
+body[data-theme='pixel'] .mana:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 10px 6px;
+  padding: 3px 8px;
+  background: #0e2036;
+  border: 2px solid #0a1320;
+}
+.mana-label {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--neon-purple);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.manabar {
+  flex: 1;
+  height: 6px;
+  background: #0a1320;
+  overflow: hidden;
+}
+.manafill {
+  display: block;
+  height: 100%;
+  background: var(--neon-purple);
+  transition: width 0.3s ease;
+}
+.manafill.mb-hot { background: var(--dragon-red); }
+.mana-pct {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--ui-light);
+  min-width: 26px;
+  text-align: right;
+}
+.mb-0 { width: 0; }
+.mb-10 { width: 10%; }
+.mb-20 { width: 20%; }
+.mb-30 { width: 30%; }
+.mb-40 { width: 40%; }
+.mb-50 { width: 50%; }
+.mb-60 { width: 60%; }
+.mb-70 { width: 70%; }
+.mb-80 { width: 80%; }
+.mb-90 { width: 90%; }
+.mb-100 { width: 100%; }
+
+/* selected/hovered creature glows electric-cyan (keeps the bevel) */
+body[data-theme='pixel'] .card.selected {
+  box-shadow: inset -2px -2px 0 #1b273f, inset 2px 2px 0 #3f5680,
+    0 0 0 2px var(--electric), 0 0 12px rgba(95, 246, 255, 0.55);
+  background: var(--card-hover);
+}
+
+/* top pills as boxy badges in the pixel theme */
+body[data-theme='pixel'] .pill {
+  border: 2px solid #0a1320;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   NOTES: tabs · saved-thread list · bubble action hub
+   (a pixel-theme feature — the classic board is left untouched)
+   ============================================================ */
+
+/* ---- tabs (PARTY / NOTES) ---- */
+.tabs {
+  display: none;
+}
+body[data-theme='pixel'] .tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 10px 0;
+  background: var(--bg-mid);
+}
+body[data-theme='pixel'] .tab {
+  flex: 1;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 7px 6px;
+  color: var(--muted);
+  background: var(--card);
+  border: 3px solid #0a1320;
+  border-bottom: none;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 #0a1320;
+}
+body[data-theme='pixel'] .tab.selected {
+  color: var(--gold);
+  background: var(--card-hover);
+  box-shadow: inset 0 -3px 0 var(--electric);
+}
+
+/* ---- notes view (mirrors the list's scroll layout) ---- */
+.notes {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 12px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.notes::-webkit-scrollbar {
+  width: 8px;
+}
+.notes::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+.note-group {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 6px 2px 0;
+}
+.note {
+  background: var(--card);
+  border: 3px solid #0a1320;
+  box-shadow: inset -2px -2px 0 #1b273f, inset 2px 2px 0 #3f5680;
+  padding: 8px 10px;
+}
+.note.prio-urgent {
+  border-left: 5px solid var(--perm);
+}
+.note.prio-important {
+  border-left: 5px solid var(--gold);
+}
+.note.prio-normal {
+  border-left: 5px solid var(--line);
+}
+.note-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.note-name {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #fff;
+  text-shadow: 1px 1px 0 #0a1320;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.note-when {
+  margin-left: auto;
+  font-size: 9px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.note-live {
+  font-size: 9px;
+  flex-shrink: 0;
+}
+.note-topic {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.note-user {
+  font-size: 11px;
+  color: var(--ui-light);
+  margin-top: 4px;
+  font-style: italic;
+}
+.note-user:empty {
+  display: none;
+}
+.note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+}
+.note-confirm {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--perm);
+  margin-right: 2px;
+}
+.dlg-btn.danger {
+  background: var(--perm);
+  color: #fff;
+}
+.dlg-btn.danger:hover {
+  background: #ff6b8f;
+}
+.notes-empty {
+  margin: auto;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* ---- dialogue action hub (Save / Go) ---- */
+.dlg-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.dlg-btn {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 5px 10px;
+  color: #20242e;
+  background: var(--electric);
+  border: 2px solid #0a1320;
+  cursor: pointer;
+}
+.dlg-btn:hover {
+  background: var(--neon-cyan);
+}
+.dlg-btn.ghost {
+  background: #d8d8c8;
+}
+.note-actions .dlg-btn {
+  background: var(--turquoise);
+}
+.note-actions .dlg-btn:hover {
+  background: var(--neon-cyan);
+}
+
+/* ---- inline save form ---- */
+.dlg-saveform {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dlg-input {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 5px 7px;
+  border: 2px solid #0a1320;
+  background: #fff;
+  color: #20242e;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.dlg-prio {
+  display: flex;
+  gap: 5px;
+}
+.prio-chip {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 7px;
+  border: 2px solid #0a1320;
+  background: #e8e8dc;
+  color: #20242e;
+  cursor: pointer;
+}
+.prio-chip.selected {
+  background: var(--gold);
+}
+.dlg-saverow {
+  display: flex;
+  gap: 6px;
+}
