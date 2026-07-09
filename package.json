@@ -1,6 +1,6 @@
 {
   "name": "claudragon",
-  "version": "0.1.0-alpha.6",
+  "version": "0.1.0-alpha.7",
   "description": "Cross-platform tray control panel for monitoring multiple Claude Code sessions — see at a glance which are running, idle, done, or waiting for your permission.",
   "type": "commonjs",
   "main": "src/main/main.js",
