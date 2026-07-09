@@ -1,8 +1,12 @@
 # 🐉 Claudragon
 
-> 🟡 **Alpha · `v0.1.0-alpha.1`** — early preview. macOS-tested; cross-platform code present but unverified. Expect rough edges.
+> 🟡 **Alpha · `v0.1.0-alpha.7`** — early preview. macOS-tested; cross-platform code present but unverified. Expect rough edges.
 
 > A cross-platform tray control panel for the fleet of [Claude Code](https://claude.com/claude-code) sessions running across your terminals.
+
+![Claudragon's pixel party screen: two sessions in a police cap waiting for permission, one dragon asleep and idle, each with an HP (context) bar, a Power (effort) meter and its model, above a shared 5-hour rate-limit bar](assets/screenshot-pixel.png)
+
+<sub>The **Pixel** view — session names blurred. A compact **Classic** board is also available (toggle with 🎮).</sub>
 
 When you run several Claude Code instances at once it's easy to lose track of which one is
 still working, which finished, and — most annoyingly — **which one is blocked waiting for

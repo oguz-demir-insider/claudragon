@@ -57,6 +57,7 @@ const EMPTY = {
   linesAdded: null,
   linesRemoved: null,
   rateLimit5h: null,
+  rateLimit7d: null,
   source: 'none',
 };
 
@@ -78,6 +79,7 @@ function statsFor(session) {
       linesAdded: numOrNull(live.linesAdded),
       linesRemoved: numOrNull(live.linesRemoved),
       rateLimit5h: clampPct(live.rateLimit5h),
+      rateLimit7d: clampPct(live.rateLimit7d),
       source: 'live',
     };
   }

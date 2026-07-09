@@ -29,11 +29,19 @@
 
     <div class="banner" id="banner" hidden></div>
 
-    <!-- Account-wide 5-hour rate-limit "mana pool" (shown once real stats are on) -->
+    <!-- Account-wide rate-limit "mana pool" gauges (shown once real stats are on):
+         5-hour and 7-day (weekly). Each row hides independently. -->
     <div class="mana" id="mana" hidden>
-      <span class="mana-label">⚡ 5h</span>
-      <div class="manabar"><i class="manafill" id="manaBar"></i></div>
-      <span class="mana-pct" id="manaPct"></span>
+      <div class="mana-row" id="mana5h" hidden>
+        <span class="mana-label">⚡ 5h</span>
+        <div class="manabar"><i class="manafill" id="manaBar"></i></div>
+        <span class="mana-pct" id="manaPct"></span>
+      </div>
+      <div class="mana-row" id="mana7d" hidden>
+        <span class="mana-label">📅 7d</span>
+        <div class="manabar"><i class="manafill" id="weekBar"></i></div>
+        <span class="mana-pct" id="weekPct"></span>
+      </div>
     </div>
 
     <main class="list" id="list"></main>

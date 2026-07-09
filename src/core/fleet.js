@@ -35,13 +35,21 @@ function getFleet(opts = {}) {
         ? 'active'
         : 'calm';
 
-  // The 5-hour rate limit is an ACCOUNT-wide figure (same across sessions), so
-  // any session that reports it gives the shared "mana pool" gauge. null until
-  // a session has live stats (the statusLine writer is opted in).
+  // The 5-hour and 7-day rate limits are ACCOUNT-wide figures (same across
+  // sessions), so any session that reports them gives the shared "mana pool"
+  // gauges. null until a session has live stats (the statusLine writer is opted
+  // in); max across sessions guards against a stale mid-write report.
   let rateLimit5h = null;
+  let rateLimit7d = null;
   for (const s of sessions) {
-    const r = s.stats && s.stats.rateLimit5h;
-    if (r != null) rateLimit5h = rateLimit5h == null ? r : Math.max(rateLimit5h, r);
+    const st = s.stats;
+    if (!st) continue;
+    if (st.rateLimit5h != null) {
+      rateLimit5h = rateLimit5h == null ? st.rateLimit5h : Math.max(rateLimit5h, st.rateLimit5h);
+    }
+    if (st.rateLimit7d != null) {
+      rateLimit7d = rateLimit7d == null ? st.rateLimit7d : Math.max(rateLimit7d, st.rateLimit7d);
+    }
   }
 
   return {
@@ -52,6 +60,7 @@ function getFleet(opts = {}) {
     attention,
     level,
     rateLimit5h,
+    rateLimit7d,
   };
 }
 

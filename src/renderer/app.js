@@ -20,8 +20,12 @@ const $banner = document.getElementById('banner');
 const $meta = document.getElementById('meta');
 const $toast = document.getElementById('toast');
 const $mana = document.getElementById('mana');
+const $mana5h = document.getElementById('mana5h');
 const $manaBar = document.getElementById('manaBar');
 const $manaPct = document.getElementById('manaPct');
+const $mana7d = document.getElementById('mana7d');
+const $weekBar = document.getElementById('weekBar');
+const $weekPct = document.getElementById('weekPct');
 const $dialogue = document.getElementById('dialogue');
 const $dlgName = document.getElementById('dlgName');
 const $dlgText = document.getElementById('dlgText');
@@ -163,18 +167,28 @@ function pill(count, label, cls) {
   return count ? `<span class="pill ${cls}">${count} ${label}</span>` : '';
 }
 
-// The shared 5-hour rate-limit gauge. Hidden until a session reports it (i.e.
-// the statusLine writer is opted in). Width is a bucket class (CSP-safe).
-function updateMana(pct) {
-  if (!$mana) return;
+// Fill one rate-limit gauge row. A null value hides that row. Width is a bucket
+// class (CSP-safe), turning red past 80%. Returns whether the row is visible.
+function fillGauge($row, $bar, $pct, pct) {
   if (pct == null) {
-    $mana.hidden = true;
-    return;
+    $row.hidden = true;
+    return false;
   }
   const p = Math.round(pct);
-  $manaBar.className = `manafill mb-${Math.round(p / 10) * 10}${p >= 80 ? ' mb-hot' : ''}`;
-  $manaPct.textContent = `${p}%`;
-  $mana.hidden = false;
+  $bar.className = `manafill mb-${Math.round(p / 10) * 10}${p >= 80 ? ' mb-hot' : ''}`;
+  $pct.textContent = `${p}%`;
+  $row.hidden = false;
+  return true;
+}
+
+// The shared account-wide rate-limit gauges (5-hour + 7-day/weekly). Each row
+// hides independently; the container hides only when neither is available (i.e.
+// the statusLine writer isn't opted in).
+function updateMana(pct5h, pct7d) {
+  if (!$mana) return;
+  const any5h = fillGauge($mana5h, $manaBar, $manaPct, pct5h);
+  const any7d = fillGauge($mana7d, $weekBar, $weekPct, pct7d);
+  $mana.hidden = !(any5h || any7d);
 }
 
 function cardHTML(s) {
@@ -334,8 +348,8 @@ function render(fleet) {
   const when = fleet.generatedAt ? new Date(fleet.generatedAt).toLocaleTimeString() : '—';
   $meta.textContent = `${fleet.total} session${fleet.total !== 1 ? 's' : ''} · ${when}`;
 
-  // Account-wide 5-hour rate limit — the shared "mana pool" across all sessions.
-  updateMana(fleet.rateLimit5h);
+  // Account-wide rate limits — the shared "mana pool" across all sessions (5h + 7d).
+  updateMana(fleet.rateLimit5h, fleet.rateLimit7d);
 
   if (!fleet.total) {
     bubbleOpen = false;
