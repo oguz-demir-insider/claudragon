@@ -8,6 +8,13 @@
 
 <sub>The **Pixel** view — session names blurred. A compact **Classic** board is also available (toggle with 🎮).</sub>
 
+**And it lives in your menu bar** — the whole fleet as a glanceable count, so you can stay in one
+window and still know the state of the rest:
+
+![Claudragon's macOS menu-bar badge: a small dragon gem followed by a live per-state count — purple for sessions waiting on your input, yellow for idle, green for running](assets/screenshot-menubar.png)
+
+<sub>🟣 waiting on your input · 🟡 idle · 🟢 running (and 🔴 when a session needs permission). Click to open the board.</sub>
+
 When you run several Claude Code instances at once it's easy to lose track of which one is
 still working, which finished, and — most annoyingly — **which one is blocked waiting for
 your permission**. Claudragon puts them all in one menubar/tray panel so you can see, at a
@@ -27,9 +34,23 @@ glance, where each session is and jump straight to the one that needs you.
 
 ## Why
 
-There are great tools for Claude Code **usage/cost** (ccusage) and **OpenTelemetry → Grafana**
-dashboards. What's missing is a simple, live **status board** that reliably shows the one thing
-that interrupts your flow: *a session is paused, waiting for you to approve a tool.* Claudragon focuses on that — live status, permission-waiting first, one-click jump.
+Writing code changed. You're rarely driving a single thing end to end anymore — you're running a
+*fleet* of Claude Code sessions in parallel, and the real cost isn't the work inside any one of
+them. It's the **switching between them**. We do our sharpest work with sustained focus on one
+thing; every context switch spends attention and drops the context you were holding in your head.
+
+Claudragon's bet is small and specific: if the time it takes to answer *"what's running, what
+needs me, where was I?"* shrinks to a single glance, the cost of each switch shrinks with it — you
+get back to focus faster and keep more of your own context intact. So it's less a dashboard than
+an **attention-management tool**: a calm surface that answers, in one look, *what am I dealing
+with — am I spread too thin, am I making progress?*
+
+The practical gap it fills: there are already good tools for Claude Code **usage/cost** (ccusage)
+and **OpenTelemetry → Grafana** dashboards. What was missing is a simple, live **status board**
+that surfaces the one thing that actually interrupts flow — *a session is paused, waiting for you*
+— and puts it first.
+
+I built it to keep my own head clear while running a fleet. If that resonates, it's yours to try.
 
 ## How it works
 
@@ -47,7 +68,7 @@ permission-waiting signal is a **first-class field** (`status: "waiting"`,
 | `status` | `waitingFor` | Board state |
 | --- | --- | --- |
 | `waiting` | `permission prompt` | 🔴 **NEEDS PERMISSION** |
-| `waiting` | (other) | 🟠 WAITING |
+| `waiting` | (other) | 🟣 **WAITING** — needs your input |
 | `busy` | – | 🟢 RUNNING |
 | `idle` | – | 🟡 IDLE |
 | (process gone) | – | ✅ DONE |
@@ -84,9 +105,10 @@ Grab the installer for your OS from the
 | **Windows** | `Claudragon-Setup-<version>.exe` | Run the installer. |
 | **Linux** | `Claudragon-<version>.AppImage` or the `.deb` | `chmod +x` the AppImage and run it, or `sudo dpkg -i` the `.deb`. |
 
-Claudragon lives in your **menubar/tray** (no dock/taskbar icon) and color-codes the fleet:
-🔴 red = someone needs permission, 🟢 green = something running, ⚪ grey = idle/empty. Click the
-tray icon to open the board.
+Claudragon lives in your **menubar/tray** (no dock/taskbar icon) and color-codes the fleet icon:
+🔴 red = someone needs permission, 🟢 green = something running, ⚪ grey = idle/empty. On macOS the
+icon is followed by a live per-state count — 🔴 need permission · 🟣 need input · 🟡 idle · 🟢 running
+(only the non-zero ones, so it stays quiet). Click the tray icon to open the board.
 
 > **Unsigned builds (alpha).** The installers aren't code-signed yet, so your OS will warn about
 > an "unidentified developer." This is expected — the app is 100% local and open source:

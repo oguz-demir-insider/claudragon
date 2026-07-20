@@ -15,7 +15,7 @@ const { getFleet } = require('../src/core/fleet');
 const EMOJI = {
   needs_permission: '🔴',
   needs_plan_approval: '🟣',
-  waiting_input: '🟠',
+  waiting_input: '🟣',
   running: '🟢',
   idle: '🟡',
   stale: '⚪',

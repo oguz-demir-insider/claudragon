@@ -258,7 +258,7 @@ function updateTray(fleet) {
   // Hover tooltip: full breakdown (incl. zeros), all platforms.
   tray.setToolTip(
     fleet.total
-      ? `Claudragon — 🔴 ${c.needs_permission || 0} need permission · 🟡 ${c.idle || 0} idle · 🟢 ${c.running || 0} running`
+      ? `Claudragon — 🔴 ${c.needs_permission || 0} need permission · 🟣 ${c.waiting_input || 0} need input · 🟡 ${c.idle || 0} idle · 🟢 ${c.running || 0} running`
       : 'Claudragon — no sessions',
   );
 
@@ -266,6 +266,7 @@ function updateTray(fleet) {
   if (process.platform === 'darwin') {
     const seg = [];
     if (c.needs_permission) seg.push(`🔴${c.needs_permission}`);
+    if (c.waiting_input) seg.push(`🟣${c.waiting_input}`);
     if (c.idle) seg.push(`🟡${c.idle}`);
     if (c.running) seg.push(`🟢${c.running}`);
     tray.setTitle(seg.length ? ` ${seg.join(' ')}` : '');

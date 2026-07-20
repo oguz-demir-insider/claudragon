@@ -7,7 +7,7 @@
 const STATE_META = {
   needs_permission: { dot: '🔴', label: 'NEEDS PERMISSION', cls: 'st-perm', badge: 'WAIT!' },
   needs_plan_approval: { dot: '🟣', label: 'APPROVE PLAN', cls: 'st-plan', badge: 'PLAN?' },
-  waiting_input: { dot: '🟠', label: 'WAITING', cls: 'st-wait', badge: 'INPUT' },
+  waiting_input: { dot: '🟣', label: 'WAITING', cls: 'st-wait', badge: 'INPUT' },
   running: { dot: '🟢', label: 'RUNNING', cls: 'st-run', badge: 'RUN' },
   idle: { dot: '🟡', label: 'IDLE', cls: 'st-idle', badge: 'ZZ' },
   stale: { dot: '⚪', label: 'STALE', cls: 'st-stale', badge: '—' },
